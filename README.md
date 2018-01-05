@@ -1,24 +1,20 @@
 # Udacity-Linux-Server-Configuration
----
 This is the final project for "Full Stack Web Developer Nanodegree" on Udacity.
 In this project, a Linux virtual machine needs to be configurated to support the Item Catalog website.
 You can visit http://35.154.168.187/ for the website deployed.
 
 # Instructions for ssh access into the instance
----
 1. Download Private Key from the SSH keys section in the Account section on Amazon Lightsail.
 2. Move the private key file into the folder ~/.ssh (where ~ is your environment's home directory). So if you downloaded the file to the Downloads folder, just execute the following command in your terminal. `mv ~/Downloads/Key.pem  ~/.ssh/`
 3. Open your terminal and type in `chmod 400 ~/.ssh/Lightsail-key.pem`
 4. In your terminal, type in `ssh -i ~/.ssh/Key.pem ubuntu@35.154.168.187`
 
 # Create a new user named grader
----
 1. `sudo adduser grader`
 2. `sudo touch /etc/sudoers.d/grader`
 3. `sudo vi /etc/sudoers.d/grader`, type in `grader ALL=(ALL:ALL) NOPASSWD:ALL`, save(`ctrl+x` then `shift+y` and then `enter` and quit.
 
 # Setup Key based authentication
----
 1. Generate keys on local machine using`ssh-keygen` ; then save the private key in ~/.ssh on local machine.(Open another terminal and generate keys)
 2. Deploy public key on developement enviroment
 On you virtual machine:
@@ -34,18 +30,15 @@ Copy the public key (one with the extension .pub) generated on your local machin
  `ssh -i ~/.ssh/"privateKeyFilename" grader@35.154.168.187`
 
 # Update all currently installed packages
----
 `$ sudo apt-get update`
 `$ sudo apt-get upgrade`
 
 # Change the ssh port from 22 to 2200
----
 1. Use `sudo nano /etc/ssh/sshd_config` and then change Port 22 to Port 2200 , save & quit.
 2. reload ssh using `sudo service ssh restart`
 Note: Remember to add and save port 2200 with Application as Custom and Protocol as TCP in the Networking section of your instance on Amazon Lightsail.
 
 # Configure Firewall to only allow incoming connections for SSH (port 2200)
----
 HTTP (port 80), and NTP (port 123)
 1. Check current UFW status `sudo ufw status` This will show that UFW is Inactive.
 2. Set-up ufw with the following commands:
@@ -74,11 +67,9 @@ To                         Action      From
 4. Confirm that root can SSH and login from local computer, `ssh -i ~/.ssh/"PrivateKeyFileName -p 2200 grader@35.154.168.187` 
 If yes, hooray we can proceed. If not, repeat the steps above since you are locked out of the server.
 # Configuring local time-zone to UTC
----
 1. Configure the time zone `sudo dpkg-reconfigure tzdata`
 2. Press `None of the Above` and then select `UTC`
 # Install and configure Apache to serve a Python mod_wsgi application
----
 1. Install Apache `sudo apt-get install apache2`
 Confirm successful installation by visiting http://35.154.168.187/. It should say "It Works" and display other Apache information on the page. 
 2. Install Python mod_wsgi `sudo apt-get install libapache2-mod-wsgi` 
@@ -88,7 +79,6 @@ Confirm successful installation by visiting http://35.154.168.187/. It should sa
 5. Restart Apache `sudo service apache2 restart`
 NOTE: After restart the Home page will return a 404 error which we will fix by configuring Apache to serve WSGI application
 #  Configure Apache to serve basic WSGI application to confirm installation of Apache and mod_wsgi
----
 1. Create the file /var/www/html/myapp.wsgi as 
 `sudo nano /var/www/html/myapp.wsgi`
 2. Within this file, write the following application
@@ -102,7 +92,6 @@ def application(environ, start_response):
 ```
 3. Refresh the page and the text in the script above will be displayed
 # Install and configure postgresql
----
 1. Install PostgreSQL 
 `sudo apt-get install postgresql postgresql-contrib`
 2. Check that remote connections are not allowed 
@@ -113,7 +102,6 @@ def application(environ, start_response):
 5. Set-up a password for user postgres 
 `\password postgres` and enter a password
 # Create a new database user named with limited permissions to the database
----
 1. Connect to database as the user postgres `sudo su - postgres`
 2. Type `psql` to generate PostgreSQL prompt
 3. Create a new user 
@@ -121,7 +109,6 @@ def application(environ, start_response):
 4. Confirm that the user was created 
 `\du`
 # Limit permissions to new database user
----
 1. Run `\du` to see what permissions the user catalog has
 2. To see possible user roles, type: `\h CREATE ROLE`
 3. Update permissions for catalog user: 
@@ -139,7 +126,6 @@ def application(environ, start_response):
 9. Restart postgresql 
 `sudo service postgresql restart`
 # Installing git
----
 1. Install Git as 
 `sudo apt-get install git`
 2. Edit Git Configuration
@@ -147,7 +133,6 @@ def application(environ, start_response):
 `git config --global user.email youremail@domain.com`
 3. Confirm by running `git config --list`
 # Clone Item Catalog project to the AWS instance
----
 1. Create a folder inside the /var/www folder called "catalog" and cd into this folder, see commands below. Remember this is a Python Flask app and not just html.
 ```
 cd /var/www 
@@ -157,7 +142,6 @@ cd catalog
 2. Clone repo for Udacity Project 3 (item-catalog): `sudo git clone  https://github.com/Sidharth1998/Item_Catalog.git catalog` 
 3. The project is now at /var/www/catalog/catalog
 # Installing Flask and creating Virtual Environment for Item Catalog app
----
 ```
 sudo apt-get install python-pip
 sudo pip install virtualenv
@@ -204,7 +188,6 @@ If you see this message, you have successfully configured the app.
 `sudo nano flaskapp.wsgi`
 11. Restart Apache `sudo service apache2 restart`
 # Additional packages for the App
----
 1. Go to directory for the catalog app
 `cd /var/www/catalog/catalog`
 ```
@@ -252,7 +235,6 @@ Remove: engine = create_engine(‘sqlite:///catalogsusers.db’, )
 Add: engine = create_engine('postgresql://catalog:password@localhost/catalog')
 9. Use the full path to client_secrets.json(change to "/var/www/catalog/catalog/client_secrets.json") in the project.py(or "init.py") file
 # To display our Catalog website
----
 1. Add IP (without the http://) to 'hosts' file 
 `sudo nano /etc/hosts`
 2. Remove default.conf and catalog.conf from being enabled (extra step since issues with seeing site on AWS)
@@ -266,7 +248,6 @@ Add: engine = create_engine('postgresql://catalog:password@localhost/catalog')
 6. Restart app 
 `sudo python __init__.py`
 # Refrences
----
 1. Udacity's FSND Forum
 2. https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
 3. https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps
