@@ -2,6 +2,7 @@
 This is the final project for "Full Stack Web Developer Nanodegree" on Udacity.
 In this project, a Linux virtual machine needs to be configurated to support the Item Catalog website.
 You can visit http://35.154.168.187/ for the website deployed.
+### Note:We need to change the url's and redirect uri's in "client_secrets.json" file. So, make the changes accordingly and download the new file.(Ex: You need to change the port from 0.0.0.0:8000 to http://35.154.168.187/login etc)
 
 # Instructions for ssh access into the instance
 1. Download Private Key from the SSH keys section in the Account section on Amazon Lightsail.
