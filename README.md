@@ -6,7 +6,7 @@ You can visit http://35.154.168.187/ for the website deployed.
 # Instructions for ssh access into the instance
 1. Download Private Key from the SSH keys section in the Account section on Amazon Lightsail.
 2. Move the private key file into the folder ~/.ssh (where ~ is your environment's home directory). So if you downloaded the file to the Downloads folder, just execute the following command in your terminal. `mv ~/Downloads/Key.pem  ~/.ssh/`
-3. Open your terminal and type in `chmod 400 ~/.ssh/Lightsail-key.pem`
+3. Open your terminal and type in `chmod 400 ~/.ssh/Key.pem`
 4. In your terminal, type in `ssh -i ~/.ssh/Key.pem ubuntu@35.154.168.187`
 
 # Create a new user named grader
@@ -36,7 +36,7 @@ Copy the public key (one with the extension .pub) generated on your local machin
 # Change the ssh port from 22 to 2200
 1. Use `sudo nano /etc/ssh/sshd_config` and then change Port 22 to Port 2200 , save & quit.
 2. reload ssh using `sudo service ssh restart`
-Note: Remember to add and save port 2200 with Application as Custom and Protocol as TCP in the Networking section of your instance on Amazon Lightsail.
+### Note: Remember to add and save port 2200 with Application as Custom and Protocol as TCP in the Networking section of your instance on Amazon Lightsail.
 
 # Configure Firewall to only allow incoming connections for SSH (port 2200)
 HTTP (port 80), and NTP (port 123)
@@ -64,7 +64,7 @@ To                         Action      From
 80/tcp (v6)                ALLOW       Anywhere (v6)
 123/udp (v6)               ALLOW       Anywhere (v6)
 ```
-4. Confirm that root can SSH and login from local computer, `ssh -i ~/.ssh/"PrivateKeyFileName -p 2200 grader@35.154.168.187` 
+4. Confirm that root can SSH and login from local computer, `ssh -i ~/.ssh/"PrivateKeyFileName" -p 2200 grader@35.154.168.187` 
 If yes, hooray we can proceed. If not, repeat the steps above since you are locked out of the server.
 # Configuring local time-zone to UTC
 1. Configure the time zone `sudo dpkg-reconfigure tzdata`
@@ -95,7 +95,7 @@ def application(environ, start_response):
 1. Install PostgreSQL 
 `sudo apt-get install postgresql postgresql-contrib`
 2. Check that remote connections are not allowed 
-`sudo less /etc/postgresql/9.3/main/pg_hba.conf` 
+`sudo less /etc/postgresql/9.5/main/pg_hba.conf` 
 3. By default, remote connections to the database are disabled for security reasons when installing PostgreSQL from the Ubuntu repositories.
 4. Basic server set-up 
 `sudo -u postgres psql postgres`
@@ -139,7 +139,7 @@ cd /var/www
 sudo mkdir catalog 
 cd catalog 
 ```
-2. Clone repo for Udacity Project 3 (item-catalog): `sudo git clone  https://github.com/Sidharth1998/Item_Catalog.git catalog` 
+2. Clone repo for Udacity Project(Item-Catalog): `sudo git clone  https://github.com/Sidharth1998/Item_Catalog.git catalog` 
 3. The project is now at /var/www/catalog/catalog
 # Installing Flask and creating Virtual Environment for Item Catalog app
 ```
