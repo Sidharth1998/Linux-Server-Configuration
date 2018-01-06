@@ -65,7 +65,8 @@ To                         Action      From
 80/tcp (v6)                ALLOW       Anywhere (v6)
 123/udp (v6)               ALLOW       Anywhere (v6)
 ```
-4. Confirm that root can SSH and login from local computer, `ssh -i ~/.ssh/"PrivateKeyFileName" -p 2200 grader@35.154.168.187` 
+4. To disable port 22 use the command `sudo ufw deny 22`
+5. Confirm that root can SSH and login from local computer, `ssh -i ~/.ssh/"PrivateKeyFileName" -p 2200 grader@35.154.168.187` 
 If yes, hooray we can proceed. If not, repeat the steps above since you are locked out of the server.
 # Configuring local time-zone to UTC
 1. Configure the time zone `sudo dpkg-reconfigure tzdata`
